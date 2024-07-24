@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Design by foolishdeveloper.com -->
+    <title>Search Page</title>
+ 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Search Details Here</h3>
+        <p>
+            <label for="part_number">PART NUMBER</label>
+            <input type="text" placeholder="Enter Part Number" id="part_number" name="part_number">
+        </p>
+        <p>
+            <label for="volume">VOLUME</label>
+            <input type="text" placeholder="Enter Volume" id="volume" name="volume">
+        </p>
+        <p>
+            <button type="submit">Enter</button>
+        </p>
+    </form>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VIEW</title>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+    <th>Part Number</th>
+    <th>Manufacturer</th>
+    <th>Data Provider</th>
+    <th>Volume</th>
+    <th>Unit Price</th>
+    <th>Total Price</th>
+  </tr>
+  <tr>
+      <td>{{ first_data.part_number }}</td>
+      <td>{{ first_data.manufacturer }}</td>
+      <td>{{ first_data.data_provider }}</td>
+      <td>{{ first_data.volume }}</td>
+      <td>{{ first_data.unit_price }}</td>
+      <td>{{ first_data.total_price }}</td>
+      <td>
+          <button type="submit">
+            <a href="{% url 'addCart' %}">ADD TO CART</a>
+          </button>
+      </td>
+  </tr>
+  {% for data in html_data %}
+      <tr>
+        <td>{{ data.part_number }}</td>
+        <td>{{ data.manufacturer }}</td>
+        <td>{{ data.data_provider }}</td>
+        <td>{{ data.volume }}</td>
+        <td>{{ data.unit_price }}</td>
+        <td>{{ data.total_price }}</td>
+        <td></td>
+      </tr>
+  {% endfor %}
+</table>
+
+</body>
+</html>
+
