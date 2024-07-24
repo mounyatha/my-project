@@ -20,6 +20,7 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 </style>
+
 </head>
 <body>
 
@@ -32,9 +33,29 @@ tr:nth-child(even) {
     <th>Unit Price</th>
     <th>Total Price</th>
   </tr>
+    <tr>
+        <td>{{ data.part_number }}</td>
+        <td>{{ data.manufacturer }}</td>
+        <td>{{ data.data_provider }}</td>
+        <td id="volume" contenteditable='true'>{{ data.volume }}</td>
+        <td id="unit_price">{{ data.unit_price }}</td>
+        <td id="total_price">{{ data.total_price }}</td>
+      </tr>
     
 </table>
-
+<a href="{% url 'view' %}" >Back to View details</a>
+<script>
+    var volume = document.getElementById("volume");
+    originalContent = volume.innerHTML;
+    volume.addEventListener('keypress', function () {
+    if ( volume.innerHTML !== originalContent ) {
+        const unit_price = document.getElementById("unit_price").innerHTML;
+        const volume_value = volume.innerHTML
+        document.getElementById("total_price").innerHTML = String((volume_value * unit_price).toFixed(5));
+    }
+  });
+    
+</script>
 </body>
 </html>
 

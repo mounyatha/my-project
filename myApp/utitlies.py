@@ -1,3 +1,5 @@
+import operator
+
 import requests
 
 
@@ -15,10 +17,10 @@ def rutronik_request(part_number, volume):
 def mouser_request(part_number, volume):
     mouser_url = "https://api.mouser.com/api/v1/search/partnumber?apiKey=82675baf-9a58-4d5a-af3f-e3bbcf486560"
     json_data = {"SearchByPartRequest": {
-                    "mouserPartNumber": part_number,
-                    "partSearchOptions": "string"
-                }
-            }
+        "mouserPartNumber": part_number,
+        "partSearchOptions": "string"
+    }
+    }
     headers = {'Content-Type': 'application/json'}
     mouser_response = requests.post(mouser_url, json=json_data, headers=headers)
     mouser_json = mouser_response.json().get('SearchResults', None)
@@ -51,6 +53,8 @@ def getUnitPrice(price_breaks, volume, quantity_key, price_key, parse=False):
         if volume <= quantity_ranges[i]:
             unit_price = [element for element in price_breaks if element[quantity_key] == quantity_ranges[i]]
             unit_price = unit_price[0].get(price_key, 0)
+            if parse:
+                unit_price = unit_price[1:]
             break
     if unit_price == 0:
         price_range = [element for element in price_breaks if element[quantity_key] == quantity_ranges[-1]]
@@ -71,7 +75,9 @@ def modifyRutronikJsonData(response, data_provider, volume):
         unit_price *= 84
     elif currency == 'EUR':
         unit_price *= 90
+
     total_price = unit_price * volume
+    total_price = round(total_price, 5)
     result_data = {'data_provider': data_provider, 'manufacturer': manufacturer, 'part_number': manufacture_part_number,
                    'volume': volume, 'unit_price': unit_price, 'total_price': total_price}
     return result_data
@@ -83,6 +89,7 @@ def modifyMouserJsonData(response, data_provider, volume):
     price_breaks = response['PriceBreaks']
     unit_price = float(getUnitPrice(price_breaks, volume, 'Quantity', 'Price', True))
     total_price = unit_price * volume
+    total_price = round(total_price, 5)
     result_data = {'data_provider': data_provider, 'manufacturer': manufacturer, 'part_number': manufacture_part_number,
                    'volume': volume, 'unit_price': unit_price, 'total_price': total_price}
     return result_data
@@ -94,6 +101,19 @@ def modifyElementJsonData(response, data_provider, volume):
     price_breaks = response['prices']
     unit_price = float(getUnitPrice(price_breaks, volume, 'to', 'cost'))
     total_price = unit_price * volume
+    total_price = round(total_price, 5)
     result_data = {'data_provider': data_provider, 'manufacturer': manufacturer, 'part_number': manufacture_part_number,
                    'volume': volume, 'unit_price': unit_price, 'total_price': total_price}
     return result_data
+
+
+def getTotalData():
+    partNumbers = ['CC0402KRX7R7BB104', 'GRM155R71H104KE14D', 'CC0603KRX7R9BB103']
+    volumes = [20000, 30000, 8000]
+    html_data = []
+    for partNumber, volume in zip(partNumbers, volumes):
+        html_data += rutronik_request(partNumber, volume)
+        html_data += element14_request(partNumber, volume)
+        html_data += mouser_request(partNumber, volume)
+    html_data.sort(key=operator.itemgetter('total_price'))
+    return html_data
