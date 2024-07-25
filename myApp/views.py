@@ -18,11 +18,11 @@ def SearchPartNumberPage(request):
     if request.method == 'POST':
         partNumber = request.POST.get('part_number')
         volume = int(request.POST.get('volume', 0))
-        html_data = []
-        html_data += rutronik_request(partNumber, volume)
-        html_data += element14_request(partNumber, volume)
-        html_data += mouser_request(partNumber, volume)
-        html_data.sort(key=operator.itemgetter('total_price'))
+        _html_data = []
+        _html_data += rutronik_request(partNumber, volume)
+        _html_data += element14_request(partNumber, volume)
+        _html_data += mouser_request(partNumber, volume)
+        _html_data.sort(key=operator.itemgetter('total_price'))
 
         return render(request, 'display.html', {"html_data": html_data})
 

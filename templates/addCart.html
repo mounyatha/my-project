@@ -45,7 +45,7 @@ tr:nth-child(even) {
 </table>
 <a href="{% url 'view' %}" >Back to View details</a>
 <script>
-    var volume = document.getElementById("volume");
+    const volume = document.getElementById("volume");
     originalContent = volume.innerHTML;
     volume.addEventListener('keypress', function () {
     if ( volume.innerHTML !== originalContent ) {
