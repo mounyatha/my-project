@@ -11,6 +11,8 @@ from django.utils.decorators import method_decorator
 
 method_decorator(csrf_protect)
 
+html_data = getTotalData()
+
 
 def SearchPartNumberPage(request):
     if request.method == 'POST':
@@ -28,13 +30,11 @@ def SearchPartNumberPage(request):
 
 
 def ViewDataPage(request):
-    html_data = getTotalData()
     return render(request, 'view.html',
                   context={'html_data': html_data[1:],
                            'first_data': html_data[0]})
 
 
 def AddCartPage(request):
-    html_data = getTotalData()
     return render(request, 'addCart.html',
                   {'data': html_data[0]})
